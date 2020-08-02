@@ -4,12 +4,13 @@ import { Observable } from 'rxjs/Rx';
 import { API_CONFIG } from '../../../config/api.config';
 import { ParticipanteDTO } from '../../../models/participante.dto';
 import { ParedaoDTO } from '../../../models/paredao.dto';
+import { ParedaoData } from '../data/paredao';
 
 @Injectable()
-export class ParedaoService {
-  constructor(
-    private http: HttpClient,
-  ) {}
+export class ParedaoService extends ParedaoData{
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   getAllParedoes(): Observable<ParedaoDTO[]> {
     return this.http.get<ParedaoDTO[]>(

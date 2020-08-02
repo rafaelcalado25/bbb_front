@@ -4,12 +4,15 @@ import { Observable } from 'rxjs/Rx';
 import { API_CONFIG } from '../../../config/api.config';
 import { ParticipanteDTO } from '../../../models/participante.dto';
 import { VotacaoDTO } from '../../../models/votacao.dto';
+import { VotacaoData } from '../data/votacao';
+import { ParedaoDTO } from '../../../models/paredao.dto';
+import { RegistroVotacoesAgrupadoPorHoraDTO } from '../../../models/registrovotacoesagrupadoporhora.dto';
 
 @Injectable()
-export class VotacaoService {
-  constructor(
-    private http: HttpClient,
-  ) {}
+export class VotacaoService extends VotacaoData{
+  constructor(private http: HttpClient,) {
+    super();
+  }
 
   efetuarVotacao(votacao: VotacaoDTO){
     return this.http.post(
@@ -22,9 +25,14 @@ export class VotacaoService {
   }
 
   consultarVotacaoParticipante(participante: ParticipanteDTO): Observable<number> {
-    console.log(participante.id);
     return this.http.get<number>(
       `${API_CONFIG.baseUrl}/votacao/consultarvotacaoparticipanteparedao/${participante.id}`
+    );
+  }
+
+  consultarVotacoesAgrupadasPorHora(paredao: ParedaoDTO): Observable<RegistroVotacoesAgrupadoPorHoraDTO[]> {
+    return this.http.get<RegistroVotacoesAgrupadoPorHoraDTO[]>(
+      `${API_CONFIG.baseUrl}/votacao/consultarvotacaoagrupadoporhora/${paredao.id}`
     );
   }
 }

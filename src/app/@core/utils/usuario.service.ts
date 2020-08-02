@@ -4,16 +4,18 @@ import { Observable } from 'rxjs/Rx';
 import { API_CONFIG } from '../../../config/api.config';
 import { ParticipanteDTO } from '../../../models/participante.dto';
 import { ParticipanteData } from '../data/participante';
+import { UsuarioData } from '../data/usuario';
+import { UsuarioDTO } from '../../../models/usuario.dto';
 
 @Injectable()
-export class ParticipanteService extends ParticipanteData {
+export class UsuarioService extends UsuarioData {
   constructor(private http: HttpClient,) {
     super();
   }
 
-  getAllParticipantes(): Observable<ParticipanteDTO[]> {
-    return this.http.get<ParticipanteDTO[]>(
-      `${API_CONFIG.baseUrl}/participante/participantes`
+  getUsuarioLogado(): Observable<UsuarioDTO>  {
+    return this.http.get<UsuarioDTO>(
+      `${API_CONFIG.baseUrl}/usuarios/usuarioLogado`
     );
   }
 }

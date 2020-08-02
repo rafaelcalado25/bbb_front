@@ -2,6 +2,8 @@
   <div class="row col-12 col-sm-6 col-md-12">
     <div class="col-6 col-sm-3 col-md-6">
       <h3>Click naquele que você deseja que saia: </h3>
+      <nb-alert status="danger" closable (close)="onClose()" *ngIf="houveErro">
+        {{textoErro}}</nb-alert>
       <nb-list>        
         <nb-list-item *ngFor="let p of participantes">
           <nb-user [picture]=p.picture [name]="p.nome" size="large"
@@ -11,11 +13,12 @@
         </nb-list-item> 
       </nb-list>
     </div>
-    <div class="col-6 col-sm-3 col-md-6">
-      <nb-card >
-        <nb-card-body >
-          <div *ngIf = 'paredaoAtivo'>
+    <div class="col-6 col-sm-3 col-md-6" *ngIf="!isAudiencia">
+      <nb-card [nbSpinner]="processandoCard" nbSpinnerStatus="success" >
+        <nb-card-body  >
+          <div *ngIf = 'paredaoAtivo && !processandoCard'>
             PAREDÃO ATIVO!
+            <ngx-tabela [paredaoAtivo]="paredaoAtivo"></ngx-tabela>
             <br><p></p>
             <div class="buttons-row">
               <button  nbButton status="primary" (click)= "fecharParedao()">
@@ -23,7 +26,7 @@
               </button>
             </div>
           </div>
-          <nb-stepper #stepper *ngIf = '!paredaoAtivo && !proximoParedao'>
+          <nb-stepper #stepper *ngIf = '!paredaoAtivo && !proximoParedao && !processandoCard'>
             <nb-step [stepControl]="firstForm" label="First step">
               <form [formGroup]="firstForm" (ngSubmit)="onNextStep(FIRST_STEP)" class="step-container">
                 <p class="lorem">
@@ -93,7 +96,7 @@
               </div>
             </nb-step>
           </nb-stepper>
-          <div *ngIf = '!paredaoAtivo && proximoParedao'>
+          <div *ngIf = '!paredaoAtivo && proximoParedao && !processandoCard'>
             <h3>Liberar Paredão</h3>
                 <button nbButton (click)="liberarParedao()">Liberar Votação</button>
 

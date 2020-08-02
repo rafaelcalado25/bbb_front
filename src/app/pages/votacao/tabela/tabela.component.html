@@ -1,0 +1,44 @@
+<nb-card>
+  <nb-card-body>
+
+    <table class="table table-bordered table-striped">
+      
+        <tr>
+          <th>
+            Mês
+          </th>
+          <th>
+            Dia
+          </th>
+          <th>
+            Hora
+          </th>
+          <th>
+            Min
+          </th>
+          <th>
+            Total
+          </th>
+        </tr>
+      
+      <tr *ngFor="let d of dataset">
+        <td>
+          {{d.mes}}
+        </td>
+        <td>
+          {{d.dia}}
+        </td>
+        <td>
+          {{d.hora}}
+        </td>
+        <td>
+          {{d.minuto}}
+        </td>
+        <td>
+          {{d.total}}
+        </td>
+      </tr>
+    </table>
+
+  </nb-card-body>
+</nb-card>
