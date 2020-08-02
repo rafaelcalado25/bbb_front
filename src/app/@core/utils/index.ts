@@ -3,6 +3,9 @@ import { AnalyticsService } from './analytics.service';
 import { PlayerService } from './player.service';
 import { StateService } from './state.service';
 import { SeoService } from './seo.service';
+import { ParticipanteService } from './participante.service';
+import { ParedaoService } from './paredao.service';
+import { VotacaoService } from './votacao.service';
 
 export {
   LayoutService,
@@ -10,4 +13,7 @@ export {
   PlayerService,
   SeoService,
   StateService,
+  ParticipanteService,
+  ParedaoService,
+  VotacaoService,
 };

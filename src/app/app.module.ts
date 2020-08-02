@@ -21,6 +21,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -41,6 +42,8 @@ import {
     ThemeModule.forRoot(),
   ],
   bootstrap: [AppComponent],
+  
+  
 })
 export class AppModule {
 }

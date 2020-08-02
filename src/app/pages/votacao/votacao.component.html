@@ -1,0 +1,107 @@
+
+  <div class="row col-12 col-sm-6 col-md-12">
+    <div class="col-6 col-sm-3 col-md-6">
+      <h3>Click naquele que você deseja que saia: </h3>
+      <nb-list>        
+        <nb-list-item *ngFor="let p of participantes">
+          <nb-user [picture]=p.picture [name]="p.nome" size="large"
+            (click)="votar(p.id)" [title]="(mapParticipanteVotacao.get(p)?
+            mapParticipanteVotacao.get(p):'0')
+            + ' Votos'"> </nb-user>
+        </nb-list-item> 
+      </nb-list>
+    </div>
+    <div class="col-6 col-sm-3 col-md-6">
+      <nb-card >
+        <nb-card-body >
+          <div *ngIf = 'paredaoAtivo'>
+            PAREDÃO ATIVO!
+            <br><p></p>
+            <div class="buttons-row">
+              <button  nbButton status="primary" (click)= "fecharParedao()">
+                Encerrar Votação
+              </button>
+            </div>
+          </div>
+          <nb-stepper #stepper *ngIf = '!paredaoAtivo && !proximoParedao'>
+            <nb-step [stepControl]="firstForm" label="First step">
+              <form [formGroup]="firstForm" (ngSubmit)="onNextStep(FIRST_STEP)" class="step-container">
+                <p class="lorem">
+                  Escolha os integrantes do novo paredão                  
+                </p>
+                
+                <nb-select formControlName="firstCtrl" fullWidth 
+                (selectedChange)="colocarParticipanteParedao($event)"
+                [ngClass]="{'form-control-danger': firstForm.invalid && (firstForm.dirty || firstForm.touched)}">
+                  <nb-option *ngFor="let p of todosParticipantes" [value]="p.id">{{p.nome}}</nb-option>                    
+                </nb-select>
+                <div class="input-group">
+                  
+                  <!-- <input type="text" placeholder="Enter your name" class="form-control" formControlName="firstCtrl"
+                         [ngClass]="{'form-control-danger': firstForm.invalid && (firstForm.dirty || firstForm.touched)}"> -->
+                </div>
+                <h5 class="grid-h">Participantes escolhidos</h5>
+                <table class="table table-bordered table-striped">
+                  <tr *ngFor="let p of participantes">
+                    <td class="col-md-10">
+                      <div>{{p.nome}}</div>
+                    </td>
+                    <td class="col-md-2" (click) = "eliminar(p.id)"> 
+                      <div>X</div>
+                    </td>
+                  </tr>
+                </table>
+                <button nbButton nbStepperNext [disabled]="!liberarPrimeiroPasso">next</button>
+              </form>
+            </nb-step>
+            <nb-step [stepControl]="secondForm" label="Second step">
+              <form [formGroup]="secondForm" (ngSubmit)="onNextStep(SECOND_STEP)" class="step-container">
+                <h6>Data selecionada: {{ date | date:'dd/MM/yyyy' }}</h6>
+                <nb-calendar size="short" [(date)]="date" ></nb-calendar>
+                <div class="input-group">
+                  <input type="text" placeholder="Enter favorite movie" class="form-control" 
+                  [value]="date | date :'dd/MM/yyyy'"  formControlName="secondCtrl"
+                         [ngClass]="{'form-control-danger': secondForm.invalid && (secondForm.dirty || secondForm.touched)}">
+                </div>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </form>
+            </nb-step>
+            <nb-step [stepControl]="thirdForm" label="Third step">
+              <form [formGroup]="thirdForm" (ngSubmit)="onNextStep(THIRD_STEP)" class="step-container">
+                <h5 class="grid-h">Integrantes do Paredão</h5>
+                <table class="table table-bordered table-striped">
+                  <tr *ngFor="let p of participantes">
+                    <td class="col-md-12">
+                      <div>{{p.nome}}</div>
+                    </td>                    
+                  </tr>
+                </table>
+                <h6 >A ser realizado em: {{date | date:'dd/MM/yyyy'}}</h6>
+                <!-- <div class="input-group">
+                  <input type="text" placeholder="Enter something" class="form-control" formControlName="thirdCtrl"
+                         [ngClass]="{'form-control-danger': thirdForm.invalid && (thirdForm.dirty || thirdForm.touched)}">
+                </div> -->
+                <button nbButton nbStepperPrevious>Voltar</button>
+                <button nbButton nbStepperNext (click)="confirmarParedao()">Confirmar</button>
+              </form>
+            </nb-step>
+            <nb-step [stepControl]="thirdForm" [hidden]="true" label="Third step">
+              <div class="step-container">
+                <h3>Paredão Formado com sucesso!</h3>
+                <button nbButton (click)="liberarParedao()">Liberar Votação</button>
+              </div>
+            </nb-step>
+          </nb-stepper>
+          <div *ngIf = '!paredaoAtivo && proximoParedao'>
+            <h3>Liberar Paredão</h3>
+                <button nbButton (click)="liberarParedao()">Liberar Votação</button>
+
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+    
+  
+

@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
+import { NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy, NbAuthJWTToken, NB_AUTH_TOKEN_INTERCEPTOR_FILTER} from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -11,6 +11,9 @@ import {
   PlayerService,
   SeoService,
   StateService,
+  ParticipanteService,
+  ParedaoService,
+  VotacaoService,
 } from './utils';
 import { UserData } from './data/users';
 import { ElectricityData } from './data/electricity';
@@ -52,6 +55,11 @@ import { StatsProgressBarService } from './mock/stats-progress-bar.service';
 import { VisitorsAnalyticsService } from './mock/visitors-analytics.service';
 import { SecurityCamerasService } from './mock/security-cameras.service';
 import { MockDataModule } from './mock/mock-data.module';
+import { API_CONFIG } from '../../config/api.config';
+import { HTTP_INTERCEPTORS, HttpRequest} from '@angular/common/http';
+import { TokenInterceptor } from './token.interceptor';
+import { StorageService } from './data/storage.service';
+
 
 const socialLinks = [
   {
@@ -91,6 +99,10 @@ const DATA_SERVICES = [
   { provide: StatsProgressBarData, useClass: StatsProgressBarService },
   { provide: VisitorsAnalyticsData, useClass: VisitorsAnalyticsService },
   { provide: SecurityCamerasData, useClass: SecurityCamerasService },
+  { provide: ParticipanteService, useClass: ParticipanteService },  
+  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+  { provide: ParedaoService, useClass: ParedaoService },  
+  { provide: StorageService, useClass: StorageService }
 ];
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
@@ -107,8 +119,42 @@ export const NB_CORE_PROVIDERS = [
 
     strategies: [
       NbDummyAuthStrategy.setup({
-        name: 'email',
-        delay: 3000,
+        name: 'dummy',
+
+        alwaysFail: false,
+        delay: 14000,
+      }),
+      NbPasswordAuthStrategy.setup({
+        name: 'email',  
+        baseEndpoint: API_CONFIG.baseUrl,
+        login: {
+                // ...
+                endpoint: '/login',
+                method: 'post', 
+                redirect: {
+                  success: '/pages/votacao',
+                  failure: null,
+                },                 
+                defaultErrors: ['Login/Senha informado errado'],
+                defaultMessages: ['Login efetuado com sucesso!!'],
+                //requireValidToken:true,
+              }, 
+              
+        token: {                  
+          class: NbAuthJWTToken,
+          key: 'Authorization',
+           getter: (module, res) => {        
+             console.log(res);    
+            return JSON.stringify(res.body[0]);         
+          } ,
+              
+        }, 
+        errors: {
+          getter: (module, res, options) => {
+            console.log(res);
+            return res.error ? res.error.message : options[module].defaultErrors;
+          },
+        },  
       }),
     ],
     forms: {
@@ -143,6 +189,16 @@ export const NB_CORE_PROVIDERS = [
   PlayerService,
   SeoService,
   StateService,
+  VotacaoService,
+
+  { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, 
+    useValue: function (req: HttpRequest<any>) {
+      if(req.url == '/login'){          
+        return true;
+      }else {
+        return false;
+      }
+      }},
 ];
 
 @NgModule({
