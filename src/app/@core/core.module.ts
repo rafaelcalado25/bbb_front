@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy, NbAuthJWTToken, NB_AUTH_TOKEN_INTERCEPTOR_FILTER} from '@nebular/auth';
+import { NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy, 
+  NbAuthJWTToken, NB_AUTH_TOKEN_INTERCEPTOR_FILTER} from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -100,9 +101,9 @@ const DATA_SERVICES = [
   { provide: VisitorsAnalyticsData, useClass: VisitorsAnalyticsService },
   { provide: SecurityCamerasData, useClass: SecurityCamerasService },
   { provide: ParticipanteService, useClass: ParticipanteService },  
-  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   { provide: ParedaoService, useClass: ParedaoService },  
-  { provide: StorageService, useClass: StorageService }
+  { provide: StorageService, useClass: StorageService },
 ];
 
 export class NbSimpleRoleProvider extends NbRoleProvider {

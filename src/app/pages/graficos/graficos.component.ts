@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GraficosComponent implements OnInit {
 
+  options: any = {};
   constructor() { }
 
   ngOnInit(): void {
