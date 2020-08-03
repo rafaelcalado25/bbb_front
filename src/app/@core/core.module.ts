@@ -104,14 +104,15 @@ export const NB_CORE_PROVIDERS = [
   },
   StorageService,
 
-  { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, 
+  /* { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, 
     useValue: function (req: HttpRequest<any>) {
       if(req.url == '/login'){          
         return true;
       }else {
         return false;
       }
-      }},
+      } 
+    }, */
 ];
 
 @NgModule({

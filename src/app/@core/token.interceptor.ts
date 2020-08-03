@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbAuthToken } from '@nebular/auth/services/token/token';
 import { NbAuthService, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { API_CONFIG } from '../../config/api.config';
 /*
 * @see https://angular.io/guide/http#intercepting-all-requests-or-responses
 */
@@ -19,7 +20,7 @@ export class TokenInterceptor implements HttpInterceptor {
    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // do not intercept request whose urls are filtered by the injected filter
       //if (!this.filter(req)) {  
-        if("http://localhost:8080/login" != req.url)  {    
+        if(API_CONFIG.baseUrl + "/login" != req.url)  {    
         return this.authService.isAuthenticatedOrRefresh()
           .pipe(
             switchMap(authenticated => {
